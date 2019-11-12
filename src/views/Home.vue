@@ -5,23 +5,29 @@
         <img class="banner_item-img" src="https://www.placecage.com/1024/768" alt="Banner">
       </figure>
     </section>
+    <product-list></product-list>
   </div>
 </template>
 
 <script>
+import ProductsList from '@/components/ProductsList.vue';
+
 export default {
   name: 'home',
+  components: {
+    'product-list': ProductsList,
+  },
 };
 </script>
 
 <style lang="scss" scoped>
 .banner_item {
   width: 100%;
-  height: 640px;
+  height: 100%;
 }
 .banner_item-img {
   width: 100%;
-  height: 640px;
+  height: 500px;
   object-fit: cover;
 }
 </style>
