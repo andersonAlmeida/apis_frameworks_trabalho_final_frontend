@@ -33,8 +33,8 @@ export default {
       required: true,
     },
     price: {
-      type: Number,
-      default: 0,
+      type: String,
+      default: '',
       required: true,
     },
     link: {

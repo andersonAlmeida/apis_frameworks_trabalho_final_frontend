@@ -6,7 +6,7 @@
           :title="`Produto ${ i }`"
           image=""
           :description="`Descrição ${ i }`"
-          :price="i + 10"
+          :price="i + 10 + ',00'"
           link="https://br.vuejs.org/v2/guide/components-props.html"
         ></product>
       </div>
