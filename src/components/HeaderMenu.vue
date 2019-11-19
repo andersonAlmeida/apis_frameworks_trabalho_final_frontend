@@ -13,7 +13,7 @@
         <div class="collapse navbar-collapse" id="conteudoNavbarSuportado">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-              <a class="nav-link" href="#">Home <span class="sr-only">(página atual)</span></a>
+              <router-link to="/" class="nav-link">Home</router-link>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#">Categorias</a>
@@ -24,7 +24,7 @@
                 Entrar
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="#">Login</a>
+                <router-link to="/login" class="dropdown-item">Login</router-link>
                 <a class="dropdown-item" href="#">Meus Pedidos</a>
                 <a class="dropdown-item" href="#">Endereços</a>
               </div>

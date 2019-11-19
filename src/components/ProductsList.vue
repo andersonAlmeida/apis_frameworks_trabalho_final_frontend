@@ -1,5 +1,5 @@
 <template>
-  <section id="products-list" class="container">
+  <section id="products-list" class="container center">
     <div class="row">
       <div class="col-lg-12 products">
         <product v-for="i in 10" :key="i"
@@ -27,7 +27,7 @@ export default {
 
 <style lang="scss" scoped>
 #products-list {
-  margin: 50px;
+  margin: 50px auto;
 }
 
 .products {
