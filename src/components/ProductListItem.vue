@@ -1,6 +1,6 @@
 <template>
   <div class="card product">
-    <img class="card-img-top" src="https://www.placecage.com/100/80" alt="Imagem de capa do card">
+    <img class="card-img-top" :src="image" alt="Imagem de capa do card">
     <div class="card-body">
       <h5 class="card-title">{{ title }}</h5>
       <p class="card-text">
@@ -9,7 +9,7 @@
       <p class="price">
         R$ <strong>{{ price }}</strong>
       </p>
-      <a :href="link" class="btn btn-block btn-primary">Ver detalhes</a>
+      <button @click="addToCart" class="btn btn-block btn-primary">Comprar</button>
     </div>
   </div>
 </template>
@@ -23,7 +23,7 @@ export default {
       default: '',
       required: true,
     },
-    imagem: {
+    image: {
       type: String,
       default: '',
     },
@@ -37,10 +37,23 @@ export default {
       default: '',
       required: true,
     },
-    link: {
-      type: String,
-      default: '',
+    id: {
+      type: Number,
+      default: null,
       required: true,
+    },
+  },
+  methods: {
+    addToCart() {
+      const prod = {
+        id: this.id,
+        name: this.title,
+        price: +this.price,
+        image: this.image,
+        qnt: 1,
+      };
+
+      this.$store.dispatch('addToCart', prod);
     },
   },
 };

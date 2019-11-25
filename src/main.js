@@ -3,8 +3,10 @@ import 'bootstrap/dist/js/bootstrap.bundle';
 import App from './App.vue';
 import router from './router';
 import store from './store';
+import AxiosDefaults from './helpers/AxiosDefaults';
 
-// Vue.use(modal);
+// seta as configurações default do axios
+AxiosDefaults();
 
 Vue.config.productionTip = false;
 

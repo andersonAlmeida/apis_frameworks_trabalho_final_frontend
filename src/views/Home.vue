@@ -2,7 +2,7 @@
   <div id="home" class="">
     <section id="banner" class="row">
       <figure class="banner_item col-lg-12">
-        <img class="banner_item-img" src="https://www.signativa.com.br/wp-content/uploads/2016/11/black-friday-esta-chegando-sua-loja-esta-preparada-1280x720.png" alt="Banner">
+        <img class="banner_item-img" src="@/assets/img/banner-bf.jpg" alt="Banner">
       </figure>
     </section>
     <product-list></product-list>

@@ -2,12 +2,12 @@
   <section id="products-list" class="container center">
     <div class="row">
       <div class="col-lg-12 products">
-        <product v-for="i in 10" :key="i"
-          :title="`Produto ${ i }`"
-          image=""
-          :description="`Descrição ${ i }`"
-          :price="i + 10 + ',00'"
-          link="https://br.vuejs.org/v2/guide/components-props.html"
+        <product v-for="prod in productsComp" :key="prod.id"
+          :title="prod.nome"
+          :image="prod.imagem[0].imagem"
+          :description="prod.descricao"
+          :price="prod.preco"
+          :id="prod.id"
         ></product>
       </div>
     </div>
@@ -15,12 +15,35 @@
 </template>
 
 <script>
+import Axios from 'axios';
 import Produtct from '@/components/ProductListItem.vue';
 
 export default {
   name: 'products-list',
   components: {
     product: Produtct,
+  },
+  data() {
+    return {
+      products: [],
+    };
+  },
+  methods: {
+    getProducts() {
+      Axios.get('/produtos').then((response) => {
+        if (response.data) {
+          this.products = response.data;
+        }
+      }).catch();
+    },
+  },
+  computed: {
+    productsComp() {
+      return this.products;
+    },
+  },
+  created() {
+    this.getProducts();
   },
 };
 </script>
