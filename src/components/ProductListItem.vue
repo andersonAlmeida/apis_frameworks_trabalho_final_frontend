@@ -1,6 +1,6 @@
 <template>
   <div class="card product">
-    <img class="card-img-top" :src="image" alt="Imagem de capa do card">
+    <img class="card-img-top" :src="imagem" alt="Imagem de capa do card">
     <div class="card-body">
       <h5 class="card-title">{{ title }}</h5>
       <p class="card-text">
@@ -24,8 +24,8 @@ export default {
       required: true,
     },
     image: {
-      type: String,
-      default: '',
+      type: Array,
+      default: () => [],
     },
     description: {
       type: String,
@@ -41,6 +41,15 @@ export default {
       type: Number,
       default: null,
       required: true,
+    },
+  },
+  computed: {
+    imagem() {
+      if (this.image.length > 0) {
+        return this.image[0].imagem;
+      }
+
+      return 'https://www.placecage.com/200/120';
     },
   },
   methods: {

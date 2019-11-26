@@ -7,6 +7,10 @@
 <script>
 export default {
   name: 'app',
+  created() {
+    // eslint-disable-next-line
+    this.$store.dispatch('getStorageCartItems');
+  },
 };
 </script>
 

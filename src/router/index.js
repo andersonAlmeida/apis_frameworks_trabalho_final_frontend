@@ -5,6 +5,7 @@ import Home from '@/views/Home.vue';
 import Login from '@/components/login/Login.vue';
 import RecoverPassword from '@/components/login/RecoverPassword.vue';
 import FormSubscribe from '@/components/subscription/FormSubscribe.vue';
+import Cart from '@/components/cart/Cart.vue';
 
 Vue.use(VueRouter);
 
@@ -28,6 +29,11 @@ const routes = [
         path: '/login/recuperar-senha',
         name: 'password-recovery',
         component: RecoverPassword,
+      },
+      {
+        path: '/carrinho',
+        name: 'cart',
+        component: Cart,
       },
     ],
   },

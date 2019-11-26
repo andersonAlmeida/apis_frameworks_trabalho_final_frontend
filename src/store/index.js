@@ -34,12 +34,22 @@ export default new Vuex.Store({
     },
     addToCart: (state, product) => {
       state.cart.push(product);
+      localStorage.setItem('api_cart', JSON.stringify(state.cart));
     },
     updateCartItem: (state, payload) => {
       const { idx, qnt, price } = payload;
 
       state.cart[idx].qnt = qnt;
       state.cart[idx].price = price;
+
+      localStorage.setItem('api_cart', JSON.stringify(state.cart));
+    },
+    addStorageCartItems: (state, items) => {
+      state.cart = JSON.parse(items);
+    },
+    removeFromCart(state, cartItems) {
+      state.cart = cartItems;
+      localStorage.setItem('api_cart', JSON.stringify(state.cart));
     },
   },
   actions: {
@@ -65,6 +75,22 @@ export default new Vuex.Store({
         }
       }
     },
+    removeFromCart(context, id) {
+      const idx = context.state.cart.findIndex(p => p.id === id);
+
+      if (idx > -1) {
+        context.state.cart.splice(idx, 1);
+        // context.commit('removeFromCart', cartUpdated);
+        localStorage.setItem('api_cart', JSON.stringify(context.state.cart));
+      }
+    },
+    getStorageCartItems(context) {
+      const cartItems = localStorage.getItem('api_cart');
+
+      if (cartItems) {
+        context.commit('addStorageCartItems', cartItems);
+      }
+    },
   },
   getters: {
     getApiToken: state => state.token,
@@ -75,6 +101,7 @@ export default new Vuex.Store({
     getIsLogged: state => state.isLogged,
     getCartItems: state => state.cart,
     getCartTotalItems: state => state.cart.reduce((total, current) => total + current.qnt, 0),
+    getCartTotalValue: state => state.cart.reduce((total, current) => total + current.price, 0),
   },
   modules: {
   },

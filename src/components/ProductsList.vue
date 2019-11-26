@@ -4,7 +4,7 @@
       <div class="col-lg-12 products">
         <product v-for="prod in productsComp" :key="prod.id"
           :title="prod.nome"
-          :image="prod.imagem[0].imagem"
+          :image="prod.imagem"
           :description="prod.descricao"
           :price="prod.preco"
           :id="prod.id"

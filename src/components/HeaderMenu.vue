@@ -43,7 +43,7 @@
           </form>
         </div>
 
-        <button class="btn btn-link ml-4">Carrinho {{ cartTotalItems }}</button>
+        <router-link to="/carrinho">Carrinho {{ cartTotalItems }}</router-link>
       </nav>
     </div>
   </div>
