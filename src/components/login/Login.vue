@@ -23,7 +23,19 @@
 
         <div class="form-group">
           <button type="submit" class="btn btn-primary pl-4 pr-4">Entrar</button>
+
           <router-link to="/cadastro" class="btn btn-link pl-4 pr-4">Não possui cadastro? Faça agora mesmo.</router-link>
+
+          <v-facebook-login class="mt-4"
+            :app-id="fbKey"
+            :options="fbOptions"
+            v-slot:login
+            @sdk-init="fbInit"
+            @login="fbLogin"
+            @connect="fbConnected"
+            @logout="fbLogout">
+            Entrar com o Facebook
+          </v-facebook-login>
         </div>
 
         <div class="form-group" v-if="invalidUser">
@@ -37,16 +49,25 @@
 <script>
 import Axios from 'axios';
 import { mapMutations } from 'vuex';
+import 'regenerator-runtime';
+import VFacebookLogin from 'vue-facebook-login-component';
 
 export default {
   name: 'login',
+  components: {
+    VFacebookLogin,
+  },
   data() {
     return {
       formData: {
         email: '',
         senha: '',
       },
+      fbKey: process.env.VUE_APP_FB_KEY,
       invalidUser: false,
+      fbOptions: {
+        version: 'v5.0',
+      },
     };
   },
   methods: {
@@ -87,6 +108,30 @@ export default {
         }
       }).catch();
     },
+    fbLogin(response) {
+      if (response.authResponse) {
+        console.log('Welcome!  Fetching your information.... ');
+        window.FB.api('/me', (userData) => {
+          console.log(userData);
+        });
+      } else {
+        console.log('User cancelled login or did not fully authorize.');
+      }
+    },
+    fbLogout(response) {
+      console.log(response);
+    },
+    fbConnected(isConnected) {
+      console.log(isConnected);
+    },
+    fbInit(sdkObj) {
+      console.log(sdkObj);
+    },
+  },
+  mounted() {
+    document.addEventListener('login', (response) => {
+      console.log(response);
+    });
   },
 };
 </script>

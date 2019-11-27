@@ -20,7 +20,7 @@
               <th scope="row">{{ i + 1 }}</th>
               <td>{{ item.name }}</td>
               <td>{{ item.qnt }}</td>
-              <td>R$ {{ item.price }}</td>
+              <td>{{ item.price | currencyFormat }}</td>
               <td><button class="btn btn-danger" @click.stop.prevent="removeFromCart(item.id)">Remover</button></td>
             </tr>
           </tbody>
@@ -29,7 +29,7 @@
       <!-- Subtotal -->
       <div class="col-12 d-flex justify-content-end">
         <p>
-          Subtotal: <strong>R$ {{ getCartTotalValue }}</strong>
+          Subtotal: <strong>{{ getCartTotalValue | currencyFormat}}</strong>
         </p>
       </div>
       <!-- Frete -->
@@ -50,10 +50,24 @@
           </div>
 
           <div class="col-6 d-flex justify-content-end flex-wrap">
-            <p class="frete-info" v-if="getFrete">frete: <strong>R$ {{ frete }}</strong></p>
+            <p class="frete-info" v-if="getFrete">frete: <strong>{{ frete | currencyFormat}}</strong></p>
             <p class="frete-info" v-if="getPrazo">{{ prazo }} dias a contar da data de débito.</p>
           </div>
         </div>
+      </div>
+
+      <!-- Total -->
+      <div class="col-12 d-flex justify-content-end">
+        <p class="total">
+          Total:
+          <strong class="value">{{ getTotal | currencyFormat}}</strong>
+        </p>
+      </div>
+
+      <!-- Botões -->
+      <div class="col-12 d-flex justify-content-between mt-4">
+        <router-link to="/" class="btn btn-primary">Continuar comprando</router-link>
+        <button @click="goToCheckout" class="btn btn-success">Ir para o checkout</button>
       </div>
     </div>
   </div>
@@ -73,12 +87,19 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['getCartItems', 'getCartTotalValue', 'getCartTotalItems']),
+    ...mapGetters(['getCartItems', 'getCartTotalValue', 'getCartTotalItems', 'getIsLogged']),
     getPrazo() {
       return this.prazo != null;
     },
     getFrete() {
       return this.frete != null;
+    },
+    getTotal() {
+      if (this.frete) {
+        return parseFloat(this.getCartTotalValue) + parseFloat(this.frete);
+      }
+
+      return this.getCartTotalValue;
     },
   },
   methods: {
@@ -104,16 +125,26 @@ export default {
         this.prazo = response[0].PrazoEntrega;
       });
     },
+    goToCheckout() {
+      if (!this.getIsLogged) {
+        this.$router.push('/login');
+      }
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
+.total {
+  font-size: 28px;
+}
+
 .table {
   td, th {
     vertical-align: middle;
   }
 }
+
 .custom-input {
   height: 100%;
   border-radius: 3px 0 0 3px;

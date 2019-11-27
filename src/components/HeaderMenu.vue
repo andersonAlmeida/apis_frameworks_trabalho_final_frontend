@@ -10,7 +10,7 @@
           aria-expanded="false" aria-label="Alterna navegação">
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="conteudoNavbarSuportado">
+        <div class="collapse navbar-collapse mr-4" id="conteudoNavbarSuportado">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
               <router-link to="/" class="nav-link">Home</router-link>

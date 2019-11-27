@@ -8,6 +8,16 @@ import AxiosDefaults from './helpers/AxiosDefaults';
 // seta as configurações default do axios
 AxiosDefaults();
 
+// formata a moeda para R$
+const currencyFormat = (value) => {
+  if (!value) return '';
+
+  return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+};
+
+// filtro para formatar números
+Vue.filter('currencyFormat', currencyFormat);
+
 Vue.config.productionTip = false;
 
 new Vue({
