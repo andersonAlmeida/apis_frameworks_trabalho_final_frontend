@@ -1,7 +1,15 @@
 <template>
-  <div class="container internal-page" id="cart-page">
+  <div class="container internal-page" id="checkout-page">
     <div class="row">
-      <h2 class="col-12">Carrinho de compras</h2>
+      <h2 class="col-12">Checkout</h2>
+    </div>
+    <div class="row mb-4">
+      <div class="col-3">
+        <label for="endereco">Endereco de entrega</label>
+        <select name="endereco" id="endereco" class="form-control" v-model="enderecoSelecionado" @change="calcFrete">
+          <option v-for="end in enderecos" :key="end.id" :value="end.id">{{ end.nome }}</option>
+        </select>
+      </div>
     </div>
     <div class="row">
       <div class="col-12">
@@ -12,7 +20,6 @@
               <th scope="col">Produto</th>
               <th scope="col">Qtd</th>
               <th scope="col">Valor</th>
-              <th scope="col">Remover</th>
             </tr>
           </thead>
           <tbody>
@@ -21,39 +28,14 @@
               <td>{{ item.name }}</td>
               <td>{{ item.qnt }}</td>
               <td>{{ item.price | currencyFormat }}</td>
-              <td><button class="btn btn-danger" @click.stop.prevent="removeFromCart(item.id)">Remover</button></td>
             </tr>
           </tbody>
         </table>
       </div>
-      <!-- Subtotal -->
-      <div class="col-12 d-flex justify-content-end">
-        <p>
-          Subtotal: <strong>{{ getCartTotalValue | currencyFormat}}</strong>
-        </p>
-      </div>
       <!-- Frete -->
       <div class="col-12">
-        <div class="row">
-          <div class="col-6">
-            <form class="form-inline">
-              <div class="input-group">
-                <div class="custom-file">
-                  <label class="label mr-2" for="frete"><strong>Frete: </strong></label>
-                  <input type="text" class="custom-input" id="frete" v-model="cep">
-                </div>
-                <div class="input-group-append">
-                  <button class="btn btn-info" type="button" @click="calcFrete">Calcular</button>
-                </div>
-            </div>
-            </form>
-          </div>
-
-          <div class="col-6 d-flex justify-content-end flex-wrap">
-            <p class="frete-info" v-if="getFrete">frete: <strong>{{ frete | currencyFormat}}</strong></p>
-            <p class="frete-info" v-if="getPrazo">{{ prazo }} dias a contar da data de débito.</p>
-          </div>
-        </div>
+        <p class="frete-info" v-if="getFrete">frete: <strong>{{ frete | currencyFormat}}</strong></p>
+        <p class="frete-info" v-if="getPrazo">{{ prazo }} dias a contar da data de débito.</p>
       </div>
 
       <!-- Total -->
@@ -65,9 +47,8 @@
       </div>
 
       <!-- Botões -->
-      <div class="col-12 d-flex justify-content-between mt-4">
-        <router-link to="/" class="btn btn-primary">Continuar comprando</router-link>
-        <button @click="goToCheckout" class="btn btn-success">Ir para o checkout</button>
+      <div class="col-12 d-flex justify-content-end mt-4">
+        <button @click="saveShop" class="btn btn-success">Finalizar compra</button>
       </div>
     </div>
   </div>
@@ -76,14 +57,17 @@
 <script>
 import { mapGetters } from 'vuex';
 import Correios from 'node-correios';
+import Axios from 'axios';
 
 export default {
-  name: 'cart',
+  name: 'checkout',
   data() {
     return {
       cep: '',
       frete: null,
       prazo: null,
+      enderecoSelecionado: '',
+      enderecos: [],
     };
   },
   computed: {
@@ -106,13 +90,14 @@ export default {
     removeFromCart(id) {
       this.$store.dispatch('removeFromCart', id);
     },
-    calcFrete() {
+    calcFrete(evt) {
       const correios = new Correios();
+      const end = this.enderecos.find(e => e.id === +evt.currentTarget.value);
 
       correios.calcPrecoPrazo({
         nCdServico: '04510',
         sCepOrigem: '90010350', // cep do senac
-        sCepDestino: this.cep,
+        sCepDestino: end.cep,
         nVlPeso: `${this.getCartTotalItems * 0.8}`, // peso fixo
         nCdFormato: 1,
         nVlComprimento: 15.5,
@@ -120,18 +105,26 @@ export default {
         nVlLargura: 20.0,
         nVlDiametro: 15.0,
       }).then((response) => {
-        console.log(response);
+        const today = new Date().getTime();
         this.frete = response[0].Valor;
-        this.prazo = response[0].PrazoEntrega;
+        this.prazo = new Date(today + (response[0].PrazoEntrega * 24 * 60 * 60 * 1000));
       });
     },
-    goToCheckout() {
+    getAddress() {
+      Axios.get(`clientes/enderecos/${this.$store.getters.getUserId}`).then((result) => {
+        if (result.data) {
+          this.enderecos = result.data;
+        }
+      });
+    },
+    saveShop() {
       if (!this.getIsLogged) {
         this.$router.push('/login');
-      } else {
-        this.$router.push('/checkout');
       }
     },
+  },
+  created() {
+    this.getAddress();
   },
 };
 </script>

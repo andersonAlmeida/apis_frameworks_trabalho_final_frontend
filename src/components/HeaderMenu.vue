@@ -30,8 +30,9 @@
 
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <router-link to="/login" class="dropdown-item" v-if="!isLogged">Login</router-link>
+                <router-link to="/area-do-cliente" class="dropdown-item" v-if="isLogged">Meus Dados</router-link>
                 <a class="dropdown-item" href="#">Meus Pedidos</a>
-                <a class="dropdown-item" href="#">Endereços</a>
+                <router-link to="/area-do-cliente/enderecos" class="dropdown-item" v-if="isLogged">Endereços</router-link>
                 <button class="dropdown-item" @click.prevent="logout" v-if="isLogged">Sair</button>
               </div>
             </li>
@@ -69,6 +70,8 @@ export default {
       this.$store.commit('setUserEmail', null);
       this.$store.commit('setUserId', null);
       this.$store.commit('setIsLogged', false);
+
+      this.$router.push('/');
     },
   },
 };

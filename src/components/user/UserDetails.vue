@@ -1,10 +1,7 @@
 <template>
-  <div id="form-subscription" class="container internal-page">
+  <div id="user-details" class="container internal-page">
     <div class="row d-flex justify-content-center">
-      <h2 class="col-md-6 page-ttl">Cadastro</h2>
-    </div>
-    <div class="row d-flex justify-content-center">
-      <form class="col-md-6" @submit.prevent="saveUserSubscription">
+      <form class="col-md-6" @submit.prevent="updateUserSubscription">
         <fieldset>
           <legend>Dados Pessoais</legend>
           <div class="form-group">
@@ -44,23 +41,15 @@
               <label for="nascimento">Nascimento</label>
               <input type="date" name="nascimento" id="nascimento" v-model="formData.nascimento" class="form-control">
             </div>
-            <!-- Senha -->
-            <div class="form-group col-md-6">
-              <label for="senha">Senha <small>(obrigatório)</small></label>
-              <input type="password" class="form-control" id="senha" v-model="formData.senha" placeholder="Senha" required>
-            </div>
           </div>
         </fieldset>
 
         <div class="row">
           <div class="col-6">
-            <button type="submit" class="btn btn-primary pl-4 pr-4">Cadastrar</button>
+            <button type="submit" class="btn btn-primary pl-4 pr-4">Atualizar</button>
           </div>
-          <div class="col-6 d-flex justify-content-end" v-if="emailNotValid">
-            <p class="text-danger m-0">E-mail já cadastrado!</p>
-          </div>
-          <div class="col-12 d-flex justify-content-end" v-if="emailNotValid">
-            <router-link to="/login/recuperar-senha">> esqueci minha senha</router-link>
+          <div class="col-6 d-flex justify-content-end" v-if="updated">
+            <p class="text-success m-0">Dados atualizados com sucesso.</p>
           </div>
         </div>
       </form>
@@ -70,55 +59,62 @@
 
 <script>
 import Axios from 'axios';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
-  name: 'form-subscribe',
+  name: 'user-details',
   data() {
     return {
       formData: {
+        id: '',
         email: '',
         nome: '',
         sobrenome: '',
         cpf: '',
         rg: '',
         nascimento: '',
-        senha: '',
-        fbid: null,
       },
-      emailNotValid: false,
+      updated: false,
     };
   },
   methods: {
-    saveUserSubscription() {
-      Axios.post('/clientes', this.formData).then((response) => {
-        if (response.status === 201 && response.data.resposta !== false) {
-          this.$router.push('login');
-        } else {
-          this.emailNotValid = true;
+    updateUserSubscription() {
+      Axios.put(`/clientes/${this.formData.id}`, this.formData).then((response) => {
+        if (response.status === 200) {
+          this.updated = true;
+
+          const obj = {};
+          const { nome, sobrenome, email } = response.data;
+
+          obj.nome = nome;
+          obj.sobrenome = sobrenome;
+          obj.email = email;
+
+          this.updateUserData(obj);
         }
       }).catch();
     },
+    getUserById() {
+      Axios.get(`/clientes/${this.formData.id}`).then((response) => {
+        this.formData = response.data;
+      });
+    },
+    ...mapActions(['updateUserData']),
+  },
+  computed: {
+    ...mapGetters(['getUserName', 'getUserLastName', 'getUserEmail', 'getUserId']),
   },
   created() {
-    this.$store.watch(state => state.email,
-      (newValue) => {
-        this.formData.email = newValue;
-      });
-    this.$store.watch(state => state.nome,
-      (newValue) => {
-        this.formData.nome = newValue;
-      });
-    this.$store.watch(state => state.sobrenome,
-      (newValue) => {
-        this.formData.sobrenome = newValue;
-      });
-    this.$store.watch(state => state.fbObject,
-      (newValue) => {
-        this.formData.fbid = newValue.id;
-      });
+    this.formData.nome = this.getUserName;
+    this.formData.sobrenome = this.getUserLastName;
+    this.formData.email = this.getUserEmail;
+    this.formData.id = this.getUserId;
+
+    this.getUserById(this.getUserId);
   },
 };
 </script>
 
 <style lang="scss" scoped>
+
 </style>

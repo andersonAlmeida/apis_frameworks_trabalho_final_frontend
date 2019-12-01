@@ -51,6 +51,12 @@ import Axios from 'axios';
 import { mapMutations } from 'vuex';
 import 'regenerator-runtime';
 import VFacebookLogin from 'vue-facebook-login-component';
+import {
+  fbInit,
+  fbLogin,
+  fbLogout,
+  fbConnected,
+} from '@/helpers/fbHelper';
 
 export default {
   name: 'login',
@@ -108,25 +114,10 @@ export default {
         }
       }).catch();
     },
-    fbLogin(response) {
-      if (response.authResponse) {
-        console.log('Welcome!  Fetching your information.... ');
-        window.FB.api('/me', (userData) => {
-          console.log(userData);
-        });
-      } else {
-        console.log('User cancelled login or did not fully authorize.');
-      }
-    },
-    fbLogout(response) {
-      console.log(response);
-    },
-    fbConnected(isConnected) {
-      console.log(isConnected);
-    },
-    fbInit(sdkObj) {
-      console.log(sdkObj);
-    },
+    fbLogin,
+    fbLogout,
+    fbConnected,
+    fbInit,
   },
   mounted() {
     document.addEventListener('login', (response) => {

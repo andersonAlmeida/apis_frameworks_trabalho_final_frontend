@@ -12,6 +12,7 @@ export default new Vuex.Store({
     codigo: null,
     cart: [],
     isLogged: null,
+    fbObject: null,
   },
   mutations: {
     setApiToken: (state, payload) => {
@@ -31,6 +32,9 @@ export default new Vuex.Store({
     },
     setIsLogged: (state, payload) => {
       state.isLogged = payload;
+    },
+    setFbObj: (state, payload) => {
+      state.fbObject = payload;
     },
     addToCart: (state, product) => {
       state.cart.push(product);
@@ -83,6 +87,17 @@ export default new Vuex.Store({
         // context.commit('removeFromCart', cartUpdated);
         localStorage.setItem('api_cart', JSON.stringify(context.state.cart));
       }
+    },
+    setFbUserData(context, fbObj) {
+      context.commit('setUserName', fbObj.first_name);
+      context.commit('setUserLastName', fbObj.last_name);
+      context.commit('setUserEmail', fbObj.email);
+      context.commit('setFbObj', fbObj);
+    },
+    updateUserData(context, data) {
+      context.commit('setUserName', data.nome);
+      context.commit('setUserLastName', data.sobrenome);
+      context.commit('setUserEmail', data.email);
     },
     getStorageCartItems(context) {
       const cartItems = localStorage.getItem('api_cart');
