@@ -13,6 +13,7 @@ import AddressList from '@/components/user/address/AddressList.vue';
 import AddressForm from '@/components/user/address/FormAddress.vue';
 import AddressUpdateForm from '@/components/user/address/FormUpdateAddress.vue';
 
+
 Vue.use(VueRouter);
 
 const routes = [
