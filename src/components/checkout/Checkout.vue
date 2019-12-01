@@ -35,7 +35,7 @@
       <!-- Frete -->
       <div class="col-12">
         <p class="frete-info" v-if="getFrete">frete: <strong>{{ frete | currencyFormat}}</strong></p>
-        <p class="frete-info" v-if="getPrazo">{{ prazo }} dias a contar da data de débito.</p>
+        <p class="frete-info" v-if="getPrazo">Entrega até {{ formatPrazo }}</p>
       </div>
 
       <!-- Total -->
@@ -58,6 +58,7 @@
 import { mapGetters } from 'vuex';
 import Correios from 'node-correios';
 import Axios from 'axios';
+import moment from 'moment';
 
 export default {
   name: 'checkout',
@@ -68,12 +69,16 @@ export default {
       prazo: null,
       enderecoSelecionado: '',
       enderecos: [],
+      produtos: [],
     };
   },
   computed: {
-    ...mapGetters(['getCartItems', 'getCartTotalValue', 'getCartTotalItems', 'getIsLogged']),
+    ...mapGetters(['getCartItems', 'getCartTotalValue', 'getCartTotalItems', 'getIsLogged', 'getUserId']),
     getPrazo() {
       return this.prazo != null;
+    },
+    formatPrazo() {
+      return moment(this.prazo).format('DD/MM/YYYY');
     },
     getFrete() {
       return this.frete != null;
@@ -105,9 +110,8 @@ export default {
         nVlLargura: 20.0,
         nVlDiametro: 15.0,
       }).then((response) => {
-        const today = new Date().getTime();
         this.frete = response[0].Valor;
-        this.prazo = new Date(today + (response[0].PrazoEntrega * 24 * 60 * 60 * 1000));
+        this.prazo = moment().add(response[0].PrazoEntrega, 'days').format('YYYY-MM-DD');
       });
     },
     getAddress() {
@@ -118,13 +122,36 @@ export default {
       });
     },
     saveShop() {
-      if (!this.getIsLogged) {
-        this.$router.push('/login');
-      }
+      if (!this.prazo) return;
+
+      Axios.post('pedidos', {
+        total: this.getTotal,
+        prazo: this.prazo,
+        id_cliente: this.getUserId,
+        codigo_rastreamento: '',
+        produtos: this.produtos,
+      }).then((result) => {
+        if (result.status === 201) {
+          // limpa o carrinho no local storage
+          localStorage.removeItem('api_cart');
+
+          // limpa o carrinho da store
+          this.$store.dispatch('clearCart');
+
+          this.$router.push('/area-do-cliente/pedidos');
+        }
+      });
     },
   },
   created() {
     this.getAddress();
+
+    this.produtos = this.getCartItems.map(p => (
+      {
+        id: p.id,
+        quantidade: p.qnt,
+      }
+    ));
   },
 };
 </script>

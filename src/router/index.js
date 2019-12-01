@@ -8,6 +8,7 @@ import FormSubscribe from '@/components/subscription/FormSubscribe.vue';
 import Cart from '@/components/cart/Cart.vue';
 import Checkout from '@/components/checkout/Checkout.vue';
 import UserDetails from '@/components/user/UserDetails.vue';
+import Orders from '@/components/user/orders/Orders.vue';
 import AddressList from '@/components/user/address/AddressList.vue';
 import AddressForm from '@/components/user/address/FormAddress.vue';
 import AddressUpdateForm from '@/components/user/address/FormUpdateAddress.vue';
@@ -54,6 +55,11 @@ const routes = [
         path: '/area-do-cliente/enderecos',
         name: 'address',
         component: AddressList,
+      },
+      {
+        path: '/area-do-cliente/pedidos',
+        name: 'orders',
+        component: Orders,
       },
       {
         path: '/area-do-cliente/enderecos/novo',

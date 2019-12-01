@@ -55,6 +55,9 @@ export default new Vuex.Store({
       state.cart = cartItems;
       localStorage.setItem('api_cart', JSON.stringify(state.cart));
     },
+    clearCart(state) {
+      state.cart = [];
+    },
   },
   actions: {
     addToCart: (context, product) => {
@@ -87,6 +90,9 @@ export default new Vuex.Store({
         // context.commit('removeFromCart', cartUpdated);
         localStorage.setItem('api_cart', JSON.stringify(context.state.cart));
       }
+    },
+    clearCart(context) {
+      context.commit('clearCart');
     },
     setFbUserData(context, fbObj) {
       context.commit('setUserName', fbObj.first_name);
