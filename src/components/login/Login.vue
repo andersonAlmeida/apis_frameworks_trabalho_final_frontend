@@ -51,12 +51,7 @@ import Axios from 'axios';
 import { mapMutations } from 'vuex';
 import 'regenerator-runtime';
 import VFacebookLogin from 'vue-facebook-login-component';
-import {
-  fbInit,
-  fbLogin,
-  fbLogout,
-  fbConnected,
-} from '@/helpers/fbHelper';
+import fbFuncs from '@/helpers/fbHelper';
 
 export default {
   name: 'login',
@@ -114,10 +109,7 @@ export default {
         }
       }).catch();
     },
-    fbLogin,
-    fbLogout,
-    fbConnected,
-    fbInit,
+    ...fbFuncs,
   },
   mounted() {
     document.addEventListener('login', (response) => {

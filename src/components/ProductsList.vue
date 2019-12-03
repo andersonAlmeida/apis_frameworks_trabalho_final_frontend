@@ -57,10 +57,26 @@ export default {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
-  .product {
-    margin-right: calc((100% - 4 * 260px) / 3);
-    &:nth-child(4n+4) {
-      margin-right: 0;
+}
+
+@media screen and (min-width: 640px) {
+  .products {
+    .product {
+      margin-right: calc((100% - 2 * 260px) / 2);
+      &:nth-child(4n+4) {
+        margin-right: 0;
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 960px) {
+  .products {
+    .product {
+      margin-right: calc((100% - 4 * 260px) / 3);
+      &:nth-child(4n+4) {
+        margin-right: 0;
+      }
     }
   }
 }

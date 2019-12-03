@@ -27,7 +27,14 @@ export default {
 }
 .banner_item-img {
   width: 100%;
-  height: 500px;
+  height: 50vh;
   object-fit: cover;
 }
+
+@media screen and (min-width: 640px) {
+  .banner_item-img {
+    height: 500px;
+  }
+}
+
 </style>

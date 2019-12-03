@@ -71,13 +71,26 @@ export default {
 <style lang="scss" scoped>
 .product {
   margin-bottom: 30px;
-  max-width: 260px;
   width: 100%;
 }
 
 .price {
   strong {
     font-size: 22px;
+  }
+}
+
+@media screen and (min-width: 640px) {
+  .product {
+    margin-bottom: 30px;
+    max-width: 260px;
+    width: 100%;
+  }
+
+  .price {
+    strong {
+      font-size: 22px;
+    }
   }
 }
 </style>

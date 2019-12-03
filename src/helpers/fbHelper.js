@@ -1,6 +1,6 @@
 import Axios from 'axios';
 import { mapActions } from 'vuex';
-import router from '@/router';
+// import router from '@/router';
 import store from '@/store';
 
 const fbFunctions = {
@@ -78,11 +78,11 @@ const fbFunctions = {
         mapActions('setIsLogged', true);
 
         // redireciona para a home já logado
-        router.push('/');
-      } else {
-        // redireciona para a página de cadastro
-        router.push('/cadastro');
+        // router.push('/');
+        return '/';
       }
+      // redireciona para a página de cadastro
+      return '/cadastro';
     }).catch();
   },
 };
@@ -94,7 +94,7 @@ const {
   fbConnected,
 } = fbFunctions;
 
-export {
+export default {
   fbInit,
   fbLogin,
   fbLogout,
