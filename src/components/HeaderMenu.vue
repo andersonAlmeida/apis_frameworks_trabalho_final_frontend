@@ -15,9 +15,6 @@
             <li class="nav-item active">
               <router-link to="/" class="nav-link">Home</router-link>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Categorias</a>
-            </li>
             <li class="nav-item dropdown">
               <a v-if="isLogged" class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
                 role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -31,20 +28,21 @@
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <router-link to="/login" class="dropdown-item" v-if="!isLogged">Login</router-link>
                 <router-link to="/area-do-cliente" class="dropdown-item" v-if="isLogged">Meus Dados</router-link>
-                <a class="dropdown-item" href="#">Meus Pedidos</a>
+                <router-link to="/area-do-cliente/pedidos" class="dropdown-item" v-if="isLogged">Meus Pedidos</router-link>
                 <router-link to="/area-do-cliente/enderecos" class="dropdown-item" v-if="isLogged">Endereços</router-link>
                 <button class="dropdown-item" @click.prevent="logout" v-if="isLogged">Sair</button>
               </div>
             </li>
+            <li class="nav-item">
+              <router-link to="/carrinho">Carrinho {{ cartTotalItems }}</router-link>
+            </li>
           </ul>
-          <form class="form-inline my-2 my-lg-0">
+          <!-- <form class="form-inline my-2 my-lg-0">
             <input class="form-control mr-sm-2" type="search"
               placeholder="Pesquisar" aria-label="Pesquisar">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Pesquisar</button>
-          </form>
+          </form> -->
         </div>
-
-        <router-link to="/carrinho">Carrinho {{ cartTotalItems }}</router-link>
       </nav>
     </div>
   </div>

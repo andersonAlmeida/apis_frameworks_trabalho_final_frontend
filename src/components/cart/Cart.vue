@@ -4,11 +4,11 @@
       <h2 class="col-12">Carrinho de compras</h2>
     </div>
     <div class="row">
-      <div class="col-12">
+      <div class="col-12 table-wrapper">
         <table class="table table-striped">
           <thead>
             <tr>
-              <th scope="col">#</th>
+              <th scope="col" class="d-none d-md-block">#</th>
               <th scope="col">Produto</th>
               <th scope="col">Qtd</th>
               <th scope="col">Valor</th>
@@ -17,7 +17,7 @@
           </thead>
           <tbody>
             <tr v-for="(item, i) in getCartItems" :key="item.id">
-              <th scope="row">{{ i + 1 }}</th>
+              <th scope="row" class="d-none d-md-block">{{ i + 1 }}</th>
               <td>{{ item.name }}</td>
               <td>{{ item.qnt }}</td>
               <td>{{ item.price | currencyFormat }}</td>
@@ -35,12 +35,12 @@
       <!-- Frete -->
       <div class="col-12">
         <div class="row">
-          <div class="col-6">
+          <div class="col-md-6">
             <form class="form-inline">
-              <div class="input-group">
+              <div class="input-group  mt-2 mb-2">
                 <div class="custom-file">
                   <label class="label mr-2" for="frete"><strong>Frete: </strong></label>
-                  <input type="text" class="custom-input" id="frete" v-model="cep">
+                  <input type="text" class="custom-input col-lg-12" id="frete" v-model="cep">
                 </div>
                 <div class="input-group-append">
                   <button class="btn btn-info" type="button" @click="calcFrete">Calcular</button>
@@ -49,7 +49,7 @@
             </form>
           </div>
 
-          <div class="col-6 d-flex justify-content-end flex-wrap">
+          <div class="col-md-6 d-flex justify-content-end flex-wrap">
             <p class="frete-info" v-if="getFrete">frete: <strong>{{ frete | currencyFormat}}</strong></p>
             <p class="frete-info" v-if="getPrazo">{{ prazo }} dias a contar da data de débito.</p>
           </div>
@@ -76,6 +76,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import Correios from 'node-correios';
+import Inputmask from 'inputmask';
 
 export default {
   name: 'cart',
@@ -126,12 +127,18 @@ export default {
       });
     },
     goToCheckout() {
+      if (this.getCartTotalItems < 1) return false;
+
       if (!this.getIsLogged) {
         this.$router.push('/login');
       } else {
         this.$router.push('/checkout');
       }
+      return true;
     },
+  },
+  mounted() {
+    Inputmask({ mask: '99999-999' }).mask(document.querySelector('#frete'));
   },
 };
 </script>

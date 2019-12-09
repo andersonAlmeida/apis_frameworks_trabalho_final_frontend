@@ -19,6 +19,7 @@ function Init() {
 
   // Axios Base URL
   Axios.defaults.baseURL = process.env.VUE_APP_REST_API;
+
   return true;
 }
 

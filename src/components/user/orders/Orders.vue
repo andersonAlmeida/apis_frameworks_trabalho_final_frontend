@@ -1,5 +1,5 @@
 <template>
-  <div id="Address-list" class="container orders-page">
+  <div id="Address-list" class="container internal-page">
     <div class="row">
       <div class="col-12">
         <h2>Pedidos</h2>
@@ -21,7 +21,7 @@
               <th scope="row">{{ ped.id }}</th>
               <td>{{ ped.prazo }}</td>
               <td>{{ prazo(ped.prazo) }}</td>
-              <td>{{ ped.total }}</td>
+              <td>{{ +ped.total | currencyFormat }}</td>
             </tr>
           </tbody>
         </table>
@@ -64,6 +64,18 @@ export default {
           if (idx > -1) {
             this.enderecos.splice(idx, 1);
           }
+        }
+      }).catch((error) => {
+        if (error.response.status === 401) {
+          localStorage.removeItem('api_user_data');
+
+          this.$store.commit('setApiToken', null);
+          this.$store.commit('setUserName', null);
+          this.$store.commit('setUserLastName', null);
+          this.$store.commit('setUserEmail', null);
+          this.$store.commit('setUserId', null);
+          this.$store.commit('setIsLogged', false);
+          this.$router.push('/login');
         }
       });
     },

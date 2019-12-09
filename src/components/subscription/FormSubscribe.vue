@@ -70,6 +70,7 @@
 
 <script>
 import Axios from 'axios';
+import Inputmask from 'inputmask';
 
 export default {
   name: 'form-subscribe',
@@ -116,6 +117,10 @@ export default {
       (newValue) => {
         this.formData.fbid = newValue.id;
       });
+  },
+  mounted() {
+    Inputmask({ mask: '999.999.999-99' }).mask(document.querySelector('#cpf'));
+    Inputmask({ mask: '9999999999' }).mask(document.querySelector('#rg'));
   },
 };
 </script>

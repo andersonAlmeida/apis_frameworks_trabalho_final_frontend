@@ -75,6 +75,18 @@ export default {
             this.enderecos.splice(idx, 1);
           }
         }
+      }).catch((error) => {
+        if (error.response.status === 401) {
+          localStorage.removeItem('api_user_data');
+
+          this.$store.commit('setApiToken', null);
+          this.$store.commit('setUserName', null);
+          this.$store.commit('setUserLastName', null);
+          this.$store.commit('setUserEmail', null);
+          this.$store.commit('setUserId', null);
+          this.$store.commit('setIsLogged', false);
+          this.$router.push('/login');
+        }
       });
     },
   },

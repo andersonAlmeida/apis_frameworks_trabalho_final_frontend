@@ -16,7 +16,7 @@ export default new Vuex.Store({
   },
   mutations: {
     setApiToken: (state, payload) => {
-      state.token = payload;
+      state.token = `Bearer ${payload}`;
     },
     setUserName: (state, payload) => {
       state.nome = payload;
@@ -101,6 +101,14 @@ export default new Vuex.Store({
       context.commit('setFbObj', fbObj);
     },
     updateUserData(context, data) {
+      const localUserData = JSON.parse(localStorage.getItem('api_user_data'));
+
+      localUserData.nome = data.nome;
+      localUserData.sobrenome = data.sobrenome;
+      localUserData.email = data.email;
+
+      localStorage.setItem('api_user_data', JSON.stringify(localUserData));
+
       context.commit('setUserName', data.nome);
       context.commit('setUserLastName', data.sobrenome);
       context.commit('setUserEmail', data.email);

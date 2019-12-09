@@ -1,15 +1,18 @@
 <template>
   <div class="card product">
-    <img class="card-img-top" :src="imagem" alt="Imagem de capa do card">
+    <figure class="product-img">
+      <img class="card-img-top" :src="imagem" alt="Imagem de capa do card">
+    </figure>
     <div class="card-body">
       <h5 class="card-title">{{ title }}</h5>
       <p class="card-text">
         {{ description }}
       </p>
       <p class="price">
-        R$ <strong>{{ price }}</strong>
+        <strong>{{ +price | currencyFormat }}</strong>
       </p>
-      <button @click="addToCart" class="btn btn-block btn-primary">Comprar</button>
+      <button v-if="item.estoque > 0" @click="addToCart" class="btn btn-block btn-primary">Comprar</button>
+      <button v-else class="btn btn-block btn-primary" type="button" disabled>Esgotado</button>
     </div>
   </div>
 </template>
@@ -42,6 +45,11 @@ export default {
       default: null,
       required: true,
     },
+    item: {
+      type: Object,
+      default: null,
+      required: true,
+    },
   },
   computed: {
     imagem() {
@@ -62,6 +70,8 @@ export default {
         qnt: 1,
       };
 
+      this.item.estoque -= 1;
+
       this.$store.dispatch('addToCart', prod);
     },
   },
@@ -80,10 +90,20 @@ export default {
   }
 }
 
-@media screen and (min-width: 640px) {
+.product-img {
+  overflow: hidden;
+}
+
+.card-img-top {
+  max-height: 200px;
+  width: auto;
+  object-fit: cover;
+}
+
+@media screen and (min-width: 768px) {
   .product {
     margin-bottom: 30px;
-    max-width: 260px;
+    max-width: 340px;
     width: 100%;
   }
 
@@ -91,6 +111,12 @@ export default {
     strong {
       font-size: 22px;
     }
+  }
+}
+
+@media screen and (min-width: 1260px) {
+  .product {
+    max-width: 260px;
   }
 }
 </style>

@@ -77,6 +77,7 @@
 <script>
 import Correios from 'node-correios';
 import Axios from 'axios';
+import Inputmask from 'inputmask';
 
 const correios = new Correios();
 
@@ -145,11 +146,26 @@ export default {
         if (result.data) {
           this.$router.push('/area-do-cliente/enderecos');
         }
+      }).catch((error) => {
+        if (error.response.status === 401) {
+          localStorage.removeItem('api_user_data');
+
+          this.$store.commit('setApiToken', null);
+          this.$store.commit('setUserName', null);
+          this.$store.commit('setUserLastName', null);
+          this.$store.commit('setUserEmail', null);
+          this.$store.commit('setUserId', null);
+          this.$store.commit('setIsLogged', false);
+          this.$router.push('/login');
+        }
       });
     },
   },
   created() {
     this.getAddressData();
+  },
+  mounted() {
+    Inputmask({ mask: '99999-999' }).mask(document.querySelector('#cep'));
   },
 };
 </script>

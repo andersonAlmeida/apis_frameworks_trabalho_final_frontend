@@ -91,6 +91,8 @@ export default {
             token,
           } = response.data;
 
+          Axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+
           localStorage.setItem('api_user_data', JSON.stringify(response.data));
 
           this.setApiToken(token);
