@@ -11,7 +11,7 @@
           <thead class="thead-dark">
             <tr>
               <th scope="col">Pedido</th>
-              <th scope="col">Itens</th>
+              <!-- <th scope="col">Itens</th> -->
               <th scope="col">Prazo</th>
               <th scope="col">Total</th>
             </tr>
@@ -19,7 +19,7 @@
           <tbody>
             <tr v-for="ped in pedidosComp" :key="ped.id">
               <th scope="row">{{ ped.id }}</th>
-              <td>{{ ped.prazo }}</td>
+              <!-- <td>{{ ped.prazo }}</td> -->
               <td>{{ prazo(ped.prazo) }}</td>
               <td>{{ +ped.total | currencyFormat }}</td>
             </tr>

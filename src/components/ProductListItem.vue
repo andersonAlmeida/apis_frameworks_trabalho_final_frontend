@@ -98,6 +98,8 @@ export default {
   max-height: 200px;
   width: auto;
   object-fit: cover;
+  margin: 0 auto;
+  display: block;
 }
 
 @media screen and (min-width: 768px) {
